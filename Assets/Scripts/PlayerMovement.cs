@@ -31,9 +31,10 @@ public class PlayerMovement : MonoBehaviour
 	void FixedUpdate()
 	{
 		ApplyMovement();
+		ApplyRotation();
 	}
 
-	void CheckMovement()
+	protected virtual void CheckMovement()
 	{
 		var _hor = Input.GetAxis("Horizontal");
 		var _vert = Input.GetAxis("Vertical");
@@ -51,13 +52,15 @@ public class PlayerMovement : MonoBehaviour
 		//	attacks.Defend();
 	}
 
-	void ApplyMovement()
+	protected virtual void ApplyMovement()
 	{
 		if (moveDirection.magnitude != 0)
 		{
 			playerRB.AddForce(moveSpeed * speedMultiplier * GetForceMultiplierValue(playerRB.velocity.magnitude) * moveDirection, ForceMode2D.Force);
 		}
-
+	}
+	protected virtual void ApplyRotation()
+	{
 		transform.rotation = Quaternion.FromToRotation(Vector2.up, lookDirection);
 	}
 }
