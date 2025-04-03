@@ -33,6 +33,8 @@ public class EntityHitEventArgs : EventArgs
 	public bool IsCancelled { get; set; }
 	public float HealthBefore { get; set; }
 	public float HealthAfter { get; set; }
+	public bool OverrideResponse { get; set; }
+	public HitResponse OverridenResponse { get; set; }
 }
 
 public class WeaponHitEventArgs : EventArgs
@@ -49,6 +51,27 @@ public class HitInfo
 	public GameObject Hitter { get; init; }
 	public float Damage { get; init; }
 	public Vector3 Knockback { get; set; }
+}
+
+[System.Serializable]
+public class Cooldown
+{
+	[SerializeField] float cooldownTime;
+	public float CooldownTime
+	{
+		set
+		{
+			cooldownTime = value;
+		}
+		get
+		{
+			return cooldownTime;
+		}
+	}
+	float nextFireTime;
+
+	public bool IsCoolingDown => Time.time < nextFireTime;
+	public void StartCooldown() => nextFireTime = Time.time + cooldownTime;
 }
 
 [Flags]

@@ -15,10 +15,10 @@ public class HealthSystem : MonoBehaviour, IHitable
 	public event EventHandler<EntityHealedEventArgs> EntityHealed;
 	public HitResponse Hit(HitInfo hitInfo)
 	{
-		EntityHitEventArgs _beh = new EntityHitEventArgs(hitInfo) { HealthBefore = healthPoints };
+		EntityHitEventArgs _beh = new EntityHitEventArgs(hitInfo) { HealthBefore = healthPoints, HealthAfter = healthPoints - hitInfo.Damage };
 		BeforeEntityHit?.Invoke(gameObject, _beh);
 
-		if (_beh.IsCancelled) return HitResponse.Ignore;
+		if (_beh.IsCancelled) return _beh.OverrideResponse? _beh.OverridenResponse : HitResponse.Ignore;
 
 		healthPoints -= hitInfo.Damage;
 		EntityHit?.Invoke(gameObject, new EntityHitEventArgs(hitInfo) 

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Weapon : MonoBehaviour
 {
-	[SerializeField] float weaponDamage;
+	[SerializeField] protected float weaponDamage;
 	public float Damage => weaponDamage;
 
-	[SerializeField] float weaponKnockback;
+	[SerializeField] protected float weaponKnockback;
 	public float Knockback => weaponKnockback;
 
 	public event EventHandler<WeaponHitEventArgs> WeaponHit;
