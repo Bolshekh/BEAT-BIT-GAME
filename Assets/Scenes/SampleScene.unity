@@ -5646,10 +5646,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2085512441}
   - component: {fileID: 2085512440}
+  - component: {fileID: 2085512447}
   - component: {fileID: 2085512439}
   - component: {fileID: 2085512443}
   - component: {fileID: 2085512445}
   - component: {fileID: 2085512444}
+  - component: {fileID: 2085512446}
   - component: {fileID: 2085512442}
   m_Layer: 0
   m_Name: Player
@@ -5859,6 +5861,32 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &2085512446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085512438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78ce4495fb4e5c346b90f45b9adb3b69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2085512447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085512438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 728c96cd399718d4488c3a6b7c7bb601, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthPoints: 3
+  maxHealthPoints: 3
 --- !u!1 &2115798952
 GameObject:
   m_ObjectHideFlags: 0
@@ -5910,6 +5938,13 @@ MonoBehaviour:
   bullet: {fileID: 1216256979155617108, guid: c655ef95cdde0a343bbb323ab7bc8387, type: 3}
   gunPoint: {fileID: 494132912}
   bulletSpeed: 10
+  baseFireSpeed: 1
+  fireSpeedToDelayConverter:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   delayBetweenShots:
     cooldownTime: 0.5
 --- !u!1001 &7601110467296248150
@@ -5923,10 +5958,6 @@ PrefabInstance:
     - target: {fileID: 672465341254597461, guid: 161805233e6718c42b97df3b149e9c4c, type: 3}
       propertyPath: m_Name
       value: BasicEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 1627997358163916844, guid: 161805233e6718c42b97df3b149e9c4c, type: 3}
-      propertyPath: DyingTime
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3513102658569126910, guid: 161805233e6718c42b97df3b149e9c4c, type: 3}
       propertyPath: m_LocalPosition.x

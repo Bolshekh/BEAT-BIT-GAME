@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,11 @@ public class EnemyMovement : MonoBehaviour
 	[SerializeField] float moveSpeed;
 	public float AttackDistance => attackDistance;
 	public bool IsInAttackDistance => Vector2.Distance(transform.position, target.transform.position) <= attackDistance;
+
+	bool PreviousAttackDistanceState = false;
+	
+	public event EventHandler OnAttackDistanceEntered;
+	public event EventHandler OnAttackDistanceExited;
 	public bool IsEnemyDying { get; private set; } = false;
 
 	GameObject target;
@@ -18,6 +24,8 @@ public class EnemyMovement : MonoBehaviour
 	{
 		target = PlayerManager.Player.gameObject;
 		enemyRB = GetComponent<Rigidbody2D>();
+
+		AttackDistanceSwitch(IsInAttackDistance);
 	}
 	/// <summary>
 	/// It wont kill enemy, only disable some of it tracking AI
@@ -26,6 +34,26 @@ public class EnemyMovement : MonoBehaviour
 	{
 		IsEnemyDying = true;
 	}
+	void AttackDistanceSwitch(bool IsInAttackDistance)
+	{
+		if (IsEnemyDying) return;
+		if (PreviousAttackDistanceState == IsInAttackDistance) return;
+
+		PreviousAttackDistanceState = IsInAttackDistance;
+
+		if (IsInAttackDistance)
+			EnterAttackDistance();
+		else
+			ExitAttackDistance();
+	}
+	void EnterAttackDistance()
+	{
+		OnAttackDistanceEntered?.Invoke(this, EventArgs.Empty);
+	}
+	void ExitAttackDistance()
+	{
+		OnAttackDistanceExited?.Invoke(this, EventArgs.Empty);
+	}
 	// Update is called once per frame
 	void Update()
 	{
@@ -33,6 +61,7 @@ public class EnemyMovement : MonoBehaviour
 		{
 			enemyRB.AddForce(moveSpeed * transform.up, ForceMode2D.Force);
 		}
+		AttackDistanceSwitch(IsInAttackDistance);
 	}
 
 	private void FixedUpdate()

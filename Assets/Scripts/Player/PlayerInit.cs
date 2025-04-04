@@ -19,6 +19,10 @@ public class PlayerInit : MonoBehaviour
                 e.OverridenResponse = HitResponse.Ignore | HitResponse.PassThrough;
 			}
         };
+        health.EntityHit += (s, e) =>
+        {
+            Debug.Log(e.HitInfo.Hitter.name);
+        };
     }
 
     // Update is called once per frame

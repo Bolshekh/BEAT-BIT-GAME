@@ -7,7 +7,7 @@ public class AnyProjectile : MonoBehaviour
 	[SerializeField] float timeToLive = 5f;
 	[SerializeField] float damage = 1f;
 	[SerializeField] float knockback = 10f;
-	List<GameObject> hits = new List<GameObject>();
+	//List<GameObject> hits = new List<GameObject>();
 	void Start()
 	{
 		timeToLive += Time.time;
@@ -23,7 +23,7 @@ public class AnyProjectile : MonoBehaviour
 	{
 		HitResponse _response = HitResponse.Ignore;
 		var _hit = collision.GetComponent<IHitable>();
-		if (_hit != null && !hits.Contains(collision.gameObject))
+		if (_hit != null/* && !hits.Contains(collision.gameObject)*/)
 		{
 			_response = _hit.Hit(new HitInfo() 
 			{
@@ -31,7 +31,7 @@ public class AnyProjectile : MonoBehaviour
 				Hitter = this.gameObject,
 				Knockback = (collision.transform.position - gameObject.transform.position) * knockback
 			});
-			hits.Add(collision.gameObject);
+			//hits.Add(collision.gameObject);
 		}
 		if (!_response.HasFlag(HitResponse.PassThrough))
 			Destroy(gameObject);
