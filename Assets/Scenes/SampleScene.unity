@@ -187,7 +187,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 100
+  m_Value: 31.6
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -208,10 +208,10 @@ RectTransform:
   - {fileID: 976964059}
   m_Father: {fileID: 139636051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0.9066667}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -28.630127}
-  m_SizeDelta: {x: 0, y: 57.2602}
+  m_AnchoredPosition: {x: 0, y: -0.63012695}
+  m_SizeDelta: {x: 0, y: 1.2602005}
   m_Pivot: {x: 0.5, y: 0.49999964}
 --- !u!1 &139636047
 GameObject:
@@ -352,10 +352,10 @@ RectTransform:
   - {fileID: 1193772187}
   m_Father: {fileID: 139636051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 17.75}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -60.5, y: -54.8}
-  m_SizeDelta: {x: -710.5762, y: 90.575}
+  m_AnchorMin: {x: 0.38000003, y: 0.85833335}
+  m_AnchorMax: {x: 0.49375004, y: 1}
+  m_AnchoredPosition: {x: -9.994019, y: -10.098114}
+  m_SizeDelta: {x: -0.6365967, y: 5.574997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &143620540
 MonoBehaviour:
@@ -404,7 +404,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0.453
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -470,7 +470,7 @@ MonoBehaviour:
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 1
+  m_FillAmount: 0.453
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -495,6 +495,8 @@ GameObject:
   - component: {fileID: 258080905}
   - component: {fileID: 258080907}
   - component: {fileID: 258080908}
+  - component: {fileID: 258080909}
+  - component: {fileID: 258080910}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -547,6 +549,12 @@ MonoBehaviour:
   maxEnemies: 1
   spawnDiameter: 12
   autoSpawn: 0
+  baseHealth: 3
+  attackForce: 4
+  damage: 1
+  knockback: 5
+  baseAttackDistance: 3
+  baseMovespeed: 2
   baseExpDrop: 1
 --- !u!114 &258080908
 MonoBehaviour:
@@ -563,7 +571,37 @@ MonoBehaviour:
   beatSlider: {fileID: 46026493}
   beatMax: 8
   beatDelay: 0.65
+  beatDelayBuffered: 0
   smoothTime: 20
+--- !u!114 &258080909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258080904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8650bb8bd6985c47be3b95d06eafc56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeScale: 0.25
+--- !u!114 &258080910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258080904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 273894aa7f41d7d48b08efed9d902980, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficultySlider: {fileID: 286445144}
+  maxDifficulty: 100
+  difficultyToUpgrade: 5
+  difficultyStep: 10
 --- !u!1 &286445142
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,10 +636,10 @@ RectTransform:
   - {fileID: 1770159093}
   m_Father: {fileID: 139636051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -63.562805}
-  m_SizeDelta: {x: 0, y: 12.6053}
+  m_AnchorMin: {x: 0, y: 0.8816667}
+  m_AnchorMax: {x: 1, y: 0.9066667}
+  m_AnchoredPosition: {x: 0, y: -0.82965046}
+  m_SizeDelta: {x: 0, y: -0.8611984}
   m_Pivot: {x: 0.5, y: 0.49999958}
 --- !u!114 &286445144
 MonoBehaviour:
@@ -650,7 +688,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 32.2
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -7018,7 +7056,7 @@ MonoBehaviour:
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 1
+  m_FillAmount: 0.474
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -7330,6 +7368,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1953585018}
   - component: {fileID: 1953585019}
+  - component: {fileID: 1953585020}
   m_Layer: 5
   m_Name: Health Slider
   m_TagString: Untagged
@@ -7354,10 +7393,10 @@ RectTransform:
   - {fileID: 391171727}
   m_Father: {fileID: 139636051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -45.287}
-  m_SizeDelta: {x: -710.5762, y: 90.575}
+  m_AnchorMin: {x: 0.44125003, y: 0.85}
+  m_AnchorMax: {x: 0.5562499, y: 1}
+  m_AnchoredPosition: {x: 1, y: -0.28796387}
+  m_SizeDelta: {x: -1.1295776, y: 0.57499695}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1953585019
 MonoBehaviour:
@@ -7406,10 +7445,31 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0.474
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!95 &1953585020
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953585017}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0e5ac480ce9432748aa91eeb3b40c9cd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2085512438
 GameObject:
   m_ObjectHideFlags: 0
@@ -7426,6 +7486,7 @@ GameObject:
   - component: {fileID: 2085512445}
   - component: {fileID: 2085512444}
   - component: {fileID: 2085512446}
+  - component: {fileID: 2085512448}
   - component: {fileID: 2085512442}
   m_Layer: 0
   m_Name: Player
@@ -7533,7 +7594,7 @@ Transform:
   m_GameObject: {fileID: 2085512438}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.43783635, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7647,6 +7708,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78ce4495fb4e5c346b90f45b9adb3b69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthSlider: {fileID: 1953585019}
+  slowMotionOnHit: 0.25
+  smoothing: 20
+  sliderAnimator: {fileID: 1953585020}
 --- !u!114 &2085512447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7661,6 +7726,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthPoints: 3
   maxHealthPoints: 3
+--- !u!114 &2085512448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085512438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1917af8698cf95044b1ea5d903657698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  expToLvlUpIncrease: 2
+  expSlider: {fileID: 143620540}
 --- !u!1 &2115798952
 GameObject:
   m_ObjectHideFlags: 0

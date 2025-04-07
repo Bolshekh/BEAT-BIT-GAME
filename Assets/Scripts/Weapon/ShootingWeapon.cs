@@ -29,6 +29,8 @@ public class ShootingWeapon : Weapon
 	void Start()
 	{
 		shootingParticles = GetComponent<ParticleSystem>();
+		bulletSpeedBuffered = bulletSpeedTotal;
+		AddFireSpeed(1);
 		WeaponHit += (s, e) =>
 		{
 			e.Hit.Hit(new HitInfo() 

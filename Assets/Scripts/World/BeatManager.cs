@@ -20,7 +20,8 @@ public class BeatManager : MonoBehaviour
 	//beat mods
 	List<float> beatDelayMod = new List<float>();
 	float beatDelayTotal => beatDelayMod.Aggregate(0f, (total, next) => total += next) * beatDelay;
-
+	[SerializeField] float beatDelayBuffered;
+	public float BeatDelay => beatDelayBuffered;
 	//smooth
 	float beatVelocity = 0;
 	[SerializeField] float smoothTime = 100;
@@ -35,6 +36,7 @@ public class BeatManager : MonoBehaviour
 		Manager = this;
 		beatSlider.maxValue = beatMax;
 		beatSlider.value = beat;
+		Upgrade(1);
 		OnBeat += (s, e) =>
 		{
 			beat++;
@@ -59,8 +61,9 @@ public class BeatManager : MonoBehaviour
 		{
 			try
 			{
-				await Task.Delay((int)(beatDelayTotal * 1000));
+				await Task.Delay((int)(beatDelayBuffered * 1000));
 
+				token.ThrowIfCancellationRequested();
 				if (token.IsCancellationRequested) return;
 
 				OnBeat?.Invoke(this, EventArgs.Empty);
@@ -74,5 +77,6 @@ public class BeatManager : MonoBehaviour
 	public void Upgrade(float Delay)
 	{
 		beatDelayMod.Add(Delay);
+		beatDelayBuffered = beatDelayTotal;
 	}
 }

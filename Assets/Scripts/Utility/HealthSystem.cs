@@ -9,9 +9,11 @@ public class HealthSystem : MonoBehaviour, IHitable
 {
 	[SerializeField] float healthPoints = 3f;
 	[SerializeField] float maxHealthPoints = 3f;
-
+	public float MaxHealthPoints => maxHealthPointBuffered;
+	public float HealthPoints => healthPoints;
 	List<float> maxHealthPointsMod = new List<float>();
-	float maxHealthPointsValue => maxHealthPointsMod.Aggregate(0f, (total, next) => total += next) + maxHealthPoints;
+	float maxHealthPointsTotal => maxHealthPointsMod.Aggregate(0f, (total, next) => total += next) + maxHealthPoints;
+	float maxHealthPointBuffered;
 
 	public bool IsDied { get; private set; } = false;
 
@@ -47,12 +49,17 @@ public class HealthSystem : MonoBehaviour, IHitable
 			PointsHealed  = Points, IsEntityHealed = healthPoints < maxHealthPoints
 		});
 
-		if (healthPoints < maxHealthPointsValue)
+		if (healthPoints < maxHealthPointBuffered)
 			healthPoints += Points;
 	}
 	public void MaxHealthUpgrade(float Amount)
 	{
 		maxHealthPointsMod.Add(Amount);
 		Heal(Amount);
+		maxHealthPointBuffered = maxHealthPointsTotal;
+	}
+	private void Start()
+	{
+		maxHealthPointBuffered = maxHealthPoints;
 	}
 }

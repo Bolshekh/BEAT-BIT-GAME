@@ -41,12 +41,27 @@ public class EnemyManager : MonoBehaviour
 	//movespeed
 	[SerializeField] float baseMovespeed = 2f;
 	List<float> movespeedMod = new List<float>();
-	float MovespeedTotal => movespeedMod.Aggregate(0f, (total, next) => total += next) * baseExpDrop;
+	float MovespeedTotal => movespeedMod.Aggregate(0f, (total, next) => total += next) * baseMovespeed;
 
 	//exp
 	[SerializeField] float baseExpDrop = 1f;
 	List<float> expMod = new List<float>();
 	float ExpTotal => expMod.Aggregate(0f, (total, next) => total += next) * baseExpDrop;
+
+	
+	public void Upgrade(float? Health = null, float? AttackForce = null, float? Damage = null,
+		float? Knockback = null, float? AttackDistance = null, float?
+		Movespeed = null, float? ExpDrop = null, int? EnemyAmount = null)
+	{
+		if (Health != null) healthModifiers.Add((float)Health);
+		if (AttackForce != null) attackForceMod.Add((float)AttackForce);
+		if (Damage != null) damageMod.Add((float)Damage);
+		if (Knockback != null) knockbackMod.Add((float)Knockback);
+		if (AttackDistance != null) attackDistanceMod.Add((float)AttackDistance);
+		if (Movespeed != null) movespeedMod.Add((float)Movespeed);
+		if (ExpDrop != null) expMod.Add((float)ExpDrop);
+		if (EnemyAmount != null) maxEnemies += (int)EnemyAmount;
+	}
 
 	// Start is called before the first frame update
 	void Start()
