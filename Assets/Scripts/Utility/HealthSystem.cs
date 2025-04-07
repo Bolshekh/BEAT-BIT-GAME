@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
@@ -9,6 +10,12 @@ public class HealthSystem : MonoBehaviour, IHitable
 	[SerializeField] float healthPoints = 3f;
 	[SerializeField] float maxHealthPoints = 3f;
 
+	List<float> maxHealthPointsMod = new List<float>();
+	float maxHealthPointsValue => maxHealthPointsMod.Aggregate(0f, (total, next) => total += next) + maxHealthPoints;
+
+	public bool IsDied { get; private set; } = false;
+
+	//events
 	public event EventHandler<EntityHitEventArgs> BeforeEntityHit;
 	public event EventHandler<EntityHitEventArgs> EntityHit;
 	public event EventHandler EntityDied;
@@ -26,21 +33,26 @@ public class HealthSystem : MonoBehaviour, IHitable
 			HealthBefore = healthPoints + hitInfo.Damage, HealthAfter = healthPoints
 		});
 
-		if(healthPoints <= 0)
+		if(healthPoints <= 0 && !IsDied)
 		{
-			Debug.Log($"Entity {gameObject.name} DIED");
+			IsDied = true;
 			EntityDied?.Invoke(gameObject, EventArgs.Empty);
 		}
 		return HitResponse.Hit;
 	}
-	public void Heal(int Points)
+	public void Heal(float Points)
 	{
 		EntityHealed?.Invoke(gameObject, new EntityHealedEventArgs() 
 		{
 			PointsHealed  = Points, IsEntityHealed = healthPoints < maxHealthPoints
 		});
 
-		if (healthPoints < maxHealthPoints)
+		if (healthPoints < maxHealthPointsValue)
 			healthPoints += Points;
+	}
+	public void MaxHealthUpgrade(float Amount)
+	{
+		maxHealthPointsMod.Add(Amount);
+		Heal(Amount);
 	}
 }

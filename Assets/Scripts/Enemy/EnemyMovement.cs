@@ -27,6 +27,11 @@ public class EnemyMovement : MonoBehaviour
 
 		AttackDistanceSwitch(IsInAttackDistance);
 	}
+	public void SetUpgrades(float AttackDistance, float MoveSpeed)
+	{
+		attackDistance = AttackDistance;
+		moveSpeed = MoveSpeed;
+	}
 	/// <summary>
 	/// It wont kill enemy, only disable some of it tracking AI
 	/// </summary>

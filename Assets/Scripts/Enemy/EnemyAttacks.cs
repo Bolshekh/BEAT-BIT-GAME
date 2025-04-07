@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -10,7 +11,11 @@ public class EnemyAttacks : MonoBehaviour
 	/// </summary>
 	[SerializeField] GameObject AttackTriggerObject;
 	[SerializeField] Rigidbody2D enemyRigidbody;
-	[SerializeField] float attackForce;
+	[SerializeField] float attackForce = 4f;
+	[SerializeField] float damage = 1f;
+	[SerializeField] float knockback = 5f;
+
+
 	HashSet<GameObject> hits = new HashSet<GameObject>();
 	//public bool IsAttacking { get; protected set; }
 	private void Start()
@@ -42,11 +47,17 @@ public class EnemyAttacks : MonoBehaviour
 		{
 			_hit.Hit(new HitInfo()
 			{
-				Damage = 1,
+				Damage = damage,
 				Hitter = this.gameObject,
-				Knockback = (collision.transform.position - gameObject.transform.position) * 10
+				Knockback = knockback * (collision.transform.position - gameObject.transform.position)
 			});
 			hits.Add(collision.gameObject);
 		}
+	}
+	public void SetUpgrades(float AttackForce, float Damage, float Knockback)
+	{
+		attackForce = AttackForce;
+		damage = Damage;
+		knockback = Knockback;
 	}
 }

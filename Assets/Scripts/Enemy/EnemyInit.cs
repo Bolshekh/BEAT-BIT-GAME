@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyInit : MonoBehaviour
 {
 	[SerializeField] ParticleSystem particles;
-	[SerializeField] float DyingTime = 0.3f;
+	[SerializeField] float dyingTime = 0.3f;
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -32,7 +32,7 @@ public class EnemyInit : MonoBehaviour
 		{
 			EnemyMovement _enemyMovement = GetComponent<EnemyMovement>();
 			_enemyMovement.SetDyingLogicToAi();
-			Destroy(gameObject, DyingTime);
+			Destroy(gameObject, dyingTime);
 		};
 
 		_enemyMovement.OnAttackDistanceEntered += (s, e) =>

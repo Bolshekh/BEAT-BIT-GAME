@@ -12,7 +12,7 @@ namespace System.Runtime.CompilerServices
 
 public class EntityHealedEventArgs : EventArgs
 {
-	public int PointsHealed;
+	public float PointsHealed;
 	/// <summary>
 	/// If entity was in fact healed. If entity had max health he will recieve heal (true), but will not be getting any healing (false)
 	/// </summary>
