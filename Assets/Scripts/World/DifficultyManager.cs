@@ -13,6 +13,7 @@ public class DifficultyManager : MonoBehaviour
 	[SerializeField] int difficultyToUpgrade;
 	[SerializeField] int difficultyStep = 10;
 	List<int> diffStepMod = new List<int>();
+	[SerializeField] GameObject winScreen;
 	int diffStepTotal => difficultyStep - diffStepMod.Aggregate(0, (total, next) => total += next);
 	int diffStepBuffered;
 	public int EnemyAmountBuff { get; private set; } = 0;
@@ -32,7 +33,7 @@ public class DifficultyManager : MonoBehaviour
 			difficultySlider.value = CurrentDiffculty;
 			if(CurrentDiffculty >= maxDifficulty)
 			{
-				//TODO: WIN!!
+				winScreen.SetActive(true);
 			}
 
 			if (CurrentDiffculty >= difficultyToUpgrade)

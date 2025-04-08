@@ -13,10 +13,12 @@ public class PlayerInit : MonoBehaviour
 	[SerializeField] Animator sliderAnimator;
 	float healthVel;
 	float health;
+	[SerializeField] GameObject deathScreen;
 	// Start is called before the first frame update
 	void Start()
 	{
 		var _health = GetComponent<HealthSystem>();
+		var _partls = transform.GetChild(1).GetComponent<ParticleSystem>();
 		healthSlider.maxValue = 3f;
 		healthSlider.value = 3f;
 		health = 3f;
@@ -34,7 +36,7 @@ public class PlayerInit : MonoBehaviour
 			healthSlider.value = e.HealthAfter;
 			health = e.HealthAfter;
 			TimeManager.Manager.SlowMotion((int)(slowMotionOnHit * 1000));
-
+			_partls.Play();
 		};
 		_health.EntityHealed += (s, e) =>
 		{
@@ -43,7 +45,8 @@ public class PlayerInit : MonoBehaviour
 		};
 		_health.EntityDied += (s, e) =>
 		{
-			//TODO: game end
+			TimeManager.Manager.StopTimeSwitch(true, this);
+			deathScreen.SetActive(true);
 		};
 		BeatManager.Manager.OnBeat += (s, e) =>
 		{

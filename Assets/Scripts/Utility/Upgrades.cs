@@ -12,7 +12,8 @@ public enum Upgrades
 	FireSpeed,
 	Health,
 	Enemy_Exp_Drop,
-	Knockback
+	Knockback,
+	Movespeed
 }
 public enum Downgrades
 {

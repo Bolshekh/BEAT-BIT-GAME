@@ -17,6 +17,7 @@ public class EnemyInit : MonoBehaviour
 		EnemyMovement _enemyMovement = GetComponent<EnemyMovement>();
 		EnemyAttacks _enemyAttacks = GetComponent<EnemyAttacks>();
 		Animator _animator = GetComponent<Animator>();
+		var _partls = transform.GetChild(2).GetComponent<ParticleSystem>();
 
 		var _length = _animator.runtimeAnimatorController.animationClips.Where(c => c.name == "Attack").First().length;
 
@@ -34,6 +35,7 @@ public class EnemyInit : MonoBehaviour
 		{
 			EnemyMovement _enemyMovement = GetComponent<EnemyMovement>();
 			_enemyMovement.SetDyingLogicToAi();
+			_partls.Play();
 			Destroy(gameObject, dyingTime);
 		};
 

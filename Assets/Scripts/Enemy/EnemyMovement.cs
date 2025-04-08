@@ -22,7 +22,7 @@ public class EnemyMovement : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		target = PlayerManager.Player.gameObject;
+		target = PlayerManager.Player;
 		enemyRB = GetComponent<Rigidbody2D>();
 
 		AttackDistanceSwitch(IsInAttackDistance);

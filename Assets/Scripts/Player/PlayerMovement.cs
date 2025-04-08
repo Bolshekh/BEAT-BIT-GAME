@@ -45,8 +45,8 @@ public class PlayerMovement : MonoBehaviour
 
 		lookDirection = _mouse - (Vector2)transform.position;
 
-		//if (Input.GetButtonDown("Fire1"))
-		//	attacks.Attack();
+		if (Input.GetButtonDown("Escape"))
+			MenuManager.Manager.SwitchPause();
 
 		//if (Input.GetButtonUp("Fire2"))
 		//	attacks.Defend();
@@ -62,5 +62,9 @@ public class PlayerMovement : MonoBehaviour
 	protected virtual void ApplyRotation()
 	{
 		transform.rotation = Quaternion.FromToRotation(Vector2.up, lookDirection);
+	}
+	public void UpgradeSpeed(float Speed)
+	{
+		speedMultiplier += Speed;
 	}
 }

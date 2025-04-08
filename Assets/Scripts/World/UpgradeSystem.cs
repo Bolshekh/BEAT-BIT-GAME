@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class UpgradeSystem : MonoBehaviour
@@ -9,13 +10,20 @@ public class UpgradeSystem : MonoBehaviour
 	public static UpgradeSystem Manager { get;private set; }
 	[SerializeField] GameObject upgrades;
 	[SerializeField] GameObject upgradeCardPrefab;
+	[SerializeField] TMP_Text upgText;
+	static string upgString = "Select upgrade";
+	static string dwgString = "Select downgrade";
 	private void Start()
 	{
 		Manager = this;
 	}
 	public void UpgradePlayer()
 	{
-		TimeManager.Manager.StopTimeSwich(true);
+		TimeManager.Manager.StopTimeSwitch(true, this);
+
+		upgText.text = upgString;
+		upgText.gameObject.SetActive(true);
+
 		List<Upgrades> _upgrades = Generate(((Upgrades[])Enum.GetValues(typeof(Upgrades))).ToList());
 		foreach (Upgrades upgrade in _upgrades)
 		{
@@ -25,7 +33,11 @@ public class UpgradeSystem : MonoBehaviour
 	}
 	public void UpgradeEnemy()
 	{
-		TimeManager.Manager.StopTimeSwich(true);
+		TimeManager.Manager.StopTimeSwitch(true, this);
+
+		upgText.text = dwgString;
+		upgText.gameObject.SetActive(true);
+
 		List<Downgrades> _upgrades = Generate(((Downgrades[])Enum.GetValues(typeof(Downgrades))).ToList());
 		foreach (Downgrades downgrade in _upgrades)
 		{
@@ -44,13 +56,14 @@ public class UpgradeSystem : MonoBehaviour
 		Upgrades.Beat_Max => 1,
 		Upgrades.Enemy_Exp_Drop => 0.3f,
 		Upgrades.Knockback => 0.5f,
+		Upgrades.Movespeed => 0.1f,
 		_ => 0
 	};
 	float GetDowngradeAmount(Downgrades downgrade) => downgrade switch
 	{
 		Downgrades.Enemy_Damage => 1,
-		Downgrades.Enemy_Attack_Distance => 0.2f,
-		Downgrades.Enemy_Attack_Force => 0.2f,
+		Downgrades.Enemy_Attack_Distance => 0.5f,
+		Downgrades.Enemy_Attack_Force => 1f,
 		Downgrades.Enemy_Health => 1,
 		Downgrades.Enemy_Knockback => 2,
 		Downgrades.Enemy_Movespeed => 0.3f,
@@ -69,7 +82,8 @@ public class UpgradeSystem : MonoBehaviour
 		{
 			GameObject.Destroy(child.gameObject);
 		}
-		TimeManager.Manager.StopTimeSwich(false);
-		BeatManager.Manager.RestartTheBeat();
+		TimeManager.Manager.StopTimeSwitch(false, this);
+		//BeatManager.Manager.RestartTheBeat();
+		upgText.gameObject.SetActive(false);
 	}
 }

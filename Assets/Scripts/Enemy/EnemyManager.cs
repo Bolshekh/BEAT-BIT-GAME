@@ -21,7 +21,7 @@ public class EnemyManager : MonoBehaviour
 	//force upgrade
 	[SerializeField] float attackForce = 4f;
 	List<float> attackForceMod = new List<float>();
-	float attackForceTotal => attackForceMod.Aggregate(0f, (total, next) => total += next) * attackForce;
+	float attackForceTotal => attackForceMod.Aggregate(0f, (total, next) => total += next) + attackForce;
 
 	//damage upgrade
 	[SerializeField] float damage = 1f;

@@ -100,8 +100,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToLive: 33.82
-  damage: 1
-  knockback: 10
 --- !u!50 &4269251926678298548
 Rigidbody2D:
   serializedVersion: 4

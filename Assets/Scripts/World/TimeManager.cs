@@ -10,18 +10,20 @@ public class TimeManager : MonoBehaviour
 	[SerializeField] float timeScale = 0.5f; 
 	public static TimeManager Manager { get; private set; }
 	CancellationTokenSource cts = new CancellationTokenSource();
+	HashSet<object> stoppers = new HashSet<object>();
+	int stoppersPrev = 0;
+	List<Task> slowMotions = new List<Task>();
+	private const float normalTimeScale = 1f;
 	private void Start()
 	{
 		Manager = this;
+		Time.timeScale = normalTimeScale;
 		//SlowTime();
 	}
 	private void Awake()
 	{
 		SlowTime();
 	}
-
-	List<Task> slowMotions = new List<Task>();
-	private const float normalTimeScale = 1f;
 	private async Task SlowTime(int millisecons, CancellationToken token)
 	{
 		token.ThrowIfCancellationRequested();
@@ -44,6 +46,7 @@ public class TimeManager : MonoBehaviour
 
 					slowMotions.Clear();
 					Time.timeScale = normalTimeScale;
+					UpdateTimeScale();
 				}
 				catch (OperationCanceledException)
 				{
@@ -57,8 +60,17 @@ public class TimeManager : MonoBehaviour
 	{
 		slowMotions.Add(SlowTime(milliseconds, cts.Token));
 	}
-	public void StopTimeSwich(bool IsStopped)
+	public void StopTimeSwitch(bool IsStopped, object sender)
 	{
-		Time.timeScale = IsStopped ? 0.01f : normalTimeScale;
+		if(IsStopped) stoppers.Add(sender);
+		else stoppers.Remove(sender);
+		Debug.Log(IsStopped.ToString() + " " + stoppers.Count);
+		UpdateTimeScale();
+	}
+	void UpdateTimeScale()
+	{
+		Time.timeScale = stoppers.Count > 0 ? 0.01f : normalTimeScale;
+		if (stoppers.Count != stoppersPrev) BeatManager.Manager.RestartTheBeat();
+		stoppersPrev = stoppers.Count;
 	}
 }

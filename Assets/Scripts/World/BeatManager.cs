@@ -57,7 +57,6 @@ public class BeatManager : MonoBehaviour
 	public void RestartTheBeat()
 	{
 		cts.Cancel();
-		cts.Dispose();
 		cts = new CancellationTokenSource();
 		StartTheBeat(cts.Token);
 	}
@@ -74,7 +73,9 @@ public class BeatManager : MonoBehaviour
 				token.ThrowIfCancellationRequested();
 				if (token.IsCancellationRequested) throw new OperationCanceledException();
 				if (!token.IsCancellationRequested)
+				{
 					OnBeat?.Invoke(this, EventArgs.Empty);
+				}
 			}
 		}
 		catch (OperationCanceledException)
