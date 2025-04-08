@@ -21,6 +21,7 @@ public class PlayerManager : MonoBehaviour
 		PlayerHealth = Player.GetComponent<HealthSystem>();
 		PlayerMovement = Player.GetComponent<PlayerMovement>();
 		PlayerExperience = Player.GetComponent<PlayerExperience>();
+		PlayerWeapon = Player.GetComponentInChildren<ShootingWeapon>();
 	}
 
 }

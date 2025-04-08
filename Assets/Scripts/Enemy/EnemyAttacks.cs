@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -23,14 +25,21 @@ public class EnemyAttacks : MonoBehaviour
 		AttackTriggerObject.SetActive(false);
 	}
 
-	public async void StartAttack(float StopDelay)
+	public async void StartAttack(float StopDelay, CancellationToken token)
 	{
-		enemyRigidbody.AddForce(attackForce * transform.up, ForceMode2D.Impulse);
+		enemyRigidbody.AddForce(attackForce * Time.timeScale * transform.up, ForceMode2D.Impulse);
 		AttackTriggerObject.SetActive(true);
+		try
+		{
+			await Task.Delay((int)(StopDelay * 1000));
+			token.ThrowIfCancellationRequested();
+		}
+		catch (OperationCanceledException)
+		{
+		}
 
-		await Task.Delay((int)(StopDelay * 1000));
-
-		StopAttack();
+		if (!token.IsCancellationRequested)
+			StopAttack();
 		//IsAttacking = true;
 	}
 	public void StopAttack()

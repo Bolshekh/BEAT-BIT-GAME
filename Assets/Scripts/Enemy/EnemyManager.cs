@@ -14,9 +14,9 @@ public class EnemyManager : MonoBehaviour
 	[SerializeField] bool autoSpawn = false;
 
 	//health upgrade
-	[SerializeField] float baseHealth = 3f;
+	//[SerializeField] float baseHealth = 3f;
 	List<float> healthModifiers = new List<float>();
-	float healthTotal => healthModifiers.Aggregate(0f, (total, next) => total += next) + baseHealth;
+	float healthTotal => healthModifiers.Aggregate(0f, (total, next) => total += next);
 
 	//force upgrade
 	[SerializeField] float attackForce = 4f;
@@ -36,17 +36,17 @@ public class EnemyManager : MonoBehaviour
 	//attack distance
 	[SerializeField] float baseAttackDistance = 3f;
 	List<float> attackDistanceMod = new List<float>();
-	float AttackDistanceTotal => attackDistanceMod.Aggregate(0f, (total, next) => total += next) * baseAttackDistance;
+	float AttackDistanceTotal => attackDistanceMod.Aggregate(0f, (total, next) => total += next) + baseAttackDistance;
 	
 	//movespeed
 	[SerializeField] float baseMovespeed = 2f;
 	List<float> movespeedMod = new List<float>();
-	float MovespeedTotal => movespeedMod.Aggregate(0f, (total, next) => total += next) * baseMovespeed;
+	float MovespeedTotal => movespeedMod.Aggregate(0f, (total, next) => total += next) + baseMovespeed;
 
 	//exp
 	[SerializeField] float baseExpDrop = 1f;
 	List<float> expMod = new List<float>();
-	float ExpTotal => expMod.Aggregate(0f, (total, next) => total += next) * baseExpDrop;
+	float ExpTotal => expMod.Aggregate(0f, (total, next) => total += next) + baseExpDrop;
 
 	
 	public void Upgrade(float? Health = null, float? AttackForce = null, float? Damage = null,
@@ -99,19 +99,27 @@ public class EnemyManager : MonoBehaviour
 
 		var _enemy = Instantiate(enemy, _point, Quaternion.identity);
 
-		var _en = _enemy.GetComponent<Spawner>().Enemy;
+		var _spawner = _enemy.GetComponent<Spawner>();
 
-		var _enHealth = _en.GetComponent<HealthSystem>();
-		var _enAttacks = _en.GetComponent<EnemyAttacks>();
-		var _enMovement = _en.GetComponent<EnemyMovement>();
-
-		_enHealth.EntityDied += (s, e) =>
+		_spawner.OnEntitySpawn += (s, e) =>
 		{
-			PlayerManager.Manager.PlayerExperience.GiveExp(ExpTotal);
+			var _en = e.Entity;
+
+			var _enHealth = _en.GetComponent<HealthSystem>();
+			var _enAttacks = _en.GetComponent<EnemyAttacks>();
+			var _enMovement = _en.GetComponent<EnemyMovement>();
+
+			_enHealth.EntityDied += (s, e) =>
+			{
+				RemoveEnemy();
+				PlayerManager.Manager.PlayerExperience.GiveExp(ExpTotal);
+			};
+			_enHealth.MaxHealthUpgrade(healthTotal);
+			_enAttacks.SetUpgrades(attackForceTotal, damageTotal, knockbackTotal);
+			_enMovement.SetUpgrades(AttackDistanceTotal, MovespeedTotal);
 		};
-		_enHealth.MaxHealthUpgrade(healthTotal);
-		_enAttacks.SetUpgrades(attackForceTotal, damageTotal, knockbackTotal);
-		_enMovement.SetUpgrades(AttackDistanceTotal, MovespeedTotal);
+
+
 
 		//enemies.Add(_enemy);
 

@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 public class EnemyInit : MonoBehaviour
 {
 	[SerializeField] ParticleSystem particles;
 	[SerializeField] float dyingTime = 0.3f;
+	CancellationTokenSource cts = new CancellationTokenSource();
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -37,7 +39,10 @@ public class EnemyInit : MonoBehaviour
 
 		_enemyMovement.OnAttackDistanceEntered += (s, e) =>
 		{
-			_enemyAttacks.StartAttack(_length);
+			if (cts.Token.IsCancellationRequested) cts = new CancellationTokenSource();
+
+			if (!_healthSystem.IsDied)
+				_enemyAttacks.StartAttack(_length, cts.Token);
 
 			//or
 

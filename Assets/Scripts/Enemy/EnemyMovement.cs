@@ -64,7 +64,7 @@ public class EnemyMovement : MonoBehaviour
 	{
 		if (!IsInAttackDistance && !IsEnemyDying)
 		{
-			enemyRB.AddForce(moveSpeed * transform.up, ForceMode2D.Force);
+			enemyRB.AddForce(moveSpeed * Time.timeScale * transform.up, ForceMode2D.Force);
 		}
 		AttackDistanceSwitch(IsInAttackDistance);
 	}

@@ -9,14 +9,17 @@ public class PlayerInit : MonoBehaviour
 	[SerializeField] float slowMotionOnHit;
 	float beatTarget;
 	float velocity;
-	[SerializeField] float smoothing;
+	[SerializeField] float smoothing = 20f;
 	[SerializeField] Animator sliderAnimator;
+	float healthVel;
+	float health;
 	// Start is called before the first frame update
 	void Start()
 	{
 		var _health = GetComponent<HealthSystem>();
 		healthSlider.maxValue = 3f;
 		healthSlider.value = 3f;
+		health = 3f;
 		_health.BeforeEntityHit += (s, e) =>
 		{
 			if (e.HitInfo.Hitter.CompareTag("PlayerBullet"))
@@ -29,7 +32,14 @@ public class PlayerInit : MonoBehaviour
 		_health.EntityHit += (s, e) =>
 		{
 			healthSlider.value = e.HealthAfter;
+			health = e.HealthAfter;
 			TimeManager.Manager.SlowMotion((int)(slowMotionOnHit * 1000));
+
+		};
+		_health.EntityHealed += (s, e) =>
+		{
+			health = e.HealthAfter;
+			healthSlider.maxValue = _health.MaxHealthPoints;
 		};
 		_health.EntityDied += (s, e) =>
 		{
@@ -37,15 +47,11 @@ public class PlayerInit : MonoBehaviour
 		};
 		BeatManager.Manager.OnBeat += (s, e) =>
 		{
-			//sliderAnimator.SetFloat("Beat", 1 / BeatManager.Manager.BeatDelay);
-			Debug.Log(beatTarget);
-			beatTarget = beatTarget < 1.3f ? 1.3f : 1f;
+			sliderAnimator.CrossFade("beat", 0.15f, 0);
 		};
 	}
 	private void Update()
 	{
-		float _smoothScale = Mathf.SmoothDamp(healthSlider.transform.localScale.x, beatTarget, ref velocity, smoothing * Time.deltaTime);
-
-		healthSlider.gameObject.GetComponent<RectTransform>().localScale = new Vector3(_smoothScale, _smoothScale, _smoothScale);
+		healthSlider.value = Mathf.SmoothDamp(healthSlider.value, health, ref healthVel, smoothing * Time.deltaTime);
 	}
 }

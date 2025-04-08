@@ -5,8 +5,6 @@ using UnityEngine;
 public class AnyProjectile : MonoBehaviour
 {
 	[SerializeField] float timeToLive = 5f;
-	[SerializeField] float damage = 1f;
-	[SerializeField] float knockback = 10f;
 	//List<GameObject> hits = new List<GameObject>();
 	void Start()
 	{
@@ -25,15 +23,9 @@ public class AnyProjectile : MonoBehaviour
 		var _hit = collision.GetComponent<IHitable>();
 		if (_hit != null/* && !hits.Contains(collision.gameObject)*/)
 		{
-			_response = _hit.Hit(new HitInfo() 
-			{
-				Damage = this.damage,
-				Hitter = this.gameObject,
-				Knockback = (collision.transform.position - gameObject.transform.position) * knockback
-			});
-			//hits.Add(collision.gameObject);
+			_response = PlayerManager.Manager.PlayerWeapon.Hit(_hit, collision, transform.position);
 		}
-		if (!_response.HasFlag(HitResponse.PassThrough))
+		if (!_response.HasFlag(HitResponse.Ignore))
 			Destroy(gameObject);
 	}
 }

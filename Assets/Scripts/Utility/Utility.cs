@@ -17,6 +17,8 @@ public class EntityHealedEventArgs : EventArgs
 	/// If entity was in fact healed. If entity had max health he will recieve heal (true), but will not be getting any healing (false)
 	/// </summary>
 	public bool IsEntityHealed;
+	public float HealthBefore { get; set; }
+	public float HealthAfter { get; set; }
 }
 
 public class EntityHitEventArgs : EventArgs
@@ -41,6 +43,10 @@ public class WeaponHitEventArgs : EventArgs
 {
 	public IHitable Hit { get; init; }
 	public Collider2D Collision { get; init; }
+}
+public class GameObjectEventArgs : EventArgs
+{
+	public GameObject Entity { get; init; }
 }
 
 public class HitInfo

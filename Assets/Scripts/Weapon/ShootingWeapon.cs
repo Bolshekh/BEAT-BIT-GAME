@@ -22,6 +22,12 @@ public class ShootingWeapon : Weapon
 	float fireSpeedTotal => fireSpeedMod.Aggregate(0f, (total, next) => total += next) * baseFireSpeed;
 	[SerializeField] AnimationCurve fireSpeedToDelayConverter;
 
+	//damage and knockback
+	[SerializeField] float damage = 1f;
+	[SerializeField] float knockback = 10f;
+
+	//passthrough
+	//float passThrough = 0;
 
 	[SerializeField] Cooldown delayBetweenShots = new Cooldown();
 	ParticleSystem shootingParticles;
@@ -45,10 +51,17 @@ public class ShootingWeapon : Weapon
 	public void AddFireSpeed(float Speed)
 	{
 		fireSpeedMod.Add(Speed);
+		UpdateStats();
 	}
 	public void AddBulletSpeed(float Speed)
 	{
 		bulletSpeedMod.Add(Speed);
+		UpdateStats();
+	}
+	public void Upgrade(float? damage = null, float? knockback = null)
+	{
+		if (damage != null) this.damage += (float)damage;
+		if (knockback != null) this.knockback += (float)knockback;
 	}
 	public void UpdateStats()
 	{
@@ -60,7 +73,6 @@ public class ShootingWeapon : Weapon
 		if (delayBetweenShots.IsCoolingDown) return;
 
 		var obj = Instantiate(bullet, gunPoint.transform.position, gunPoint.transform.rotation);
-
 		obj.GetComponent<Rigidbody2D>()?.AddForce(bulletSpeedBuffered * (gunPoint.transform.root.up), ForceMode2D.Impulse);
 
 
@@ -69,5 +81,23 @@ public class ShootingWeapon : Weapon
 		//visuals
 		await Task.Delay((int)(delayBetweenShots.CooldownTime * 150));
 		shootingParticles.Play();
+	}
+	public HitResponse Hit(IHitable target, Collider2D collision, Vector3 BulletPosition)
+	{
+		//if (Hits.Contains(collision.gameObject)) passthough upgrade??
+		//{
+		//	if(passThrough )
+		//	return HitResponse.Ignore;
+		//}
+
+
+		//Hits.Add(collision.gameObject);
+		
+		return target.Hit(new HitInfo()
+		{
+			Damage = this.damage,
+			Hitter = this.gameObject,
+			Knockback = knockback * (collision.transform.position - BulletPosition)
+		});
 	}
 }

@@ -19,7 +19,7 @@ public class BeatManager : MonoBehaviour
 
 	//beat mods
 	List<float> beatDelayMod = new List<float>();
-	float beatDelayTotal => beatDelayMod.Aggregate(0f, (total, next) => total += next) * beatDelay;
+	float beatDelayTotal => beatDelayMod.Aggregate(0f, (total, next) => total += next) + beatDelay;
 	[SerializeField] float beatDelayBuffered;
 	public float BeatDelay => beatDelayBuffered;
 	//smooth
@@ -30,13 +30,13 @@ public class BeatManager : MonoBehaviour
 	public event EventHandler OnBeatMax;
 
 	CancellationTokenSource cts = new CancellationTokenSource();
-
+	float TimeScale => (1 / (Time.timeScale + 0.001f));
 	void Start()
 	{
 		Manager = this;
 		beatSlider.maxValue = beatMax;
 		beatSlider.value = beat;
-		Upgrade(1);
+		beatDelayBuffered = beatDelayTotal;
 		OnBeat += (s, e) =>
 		{
 			beat++;
@@ -54,29 +54,42 @@ public class BeatManager : MonoBehaviour
 	{
 		beatSlider.value = Mathf.SmoothDamp(beatSlider.value, beat, ref beatVelocity, smoothTime * Time.deltaTime);
 	}
+	public void RestartTheBeat()
+	{
+		cts.Cancel();
+		cts.Dispose();
+		cts = new CancellationTokenSource();
+		StartTheBeat(cts.Token);
+	}
 	async void StartTheBeat(CancellationToken token)
 	{
-		token.ThrowIfCancellationRequested();
-		while (true)
+		try
 		{
-			try
+			while (true)
 			{
-				await Task.Delay((int)(beatDelayBuffered * 1000));
+				token.ThrowIfCancellationRequested();
+
+				await Task.Delay((int)(beatDelayBuffered * 1000 * TimeScale), token);
 
 				token.ThrowIfCancellationRequested();
-				if (token.IsCancellationRequested) return;
-
-				OnBeat?.Invoke(this, EventArgs.Empty);
+				if (token.IsCancellationRequested) throw new OperationCanceledException();
+				if (!token.IsCancellationRequested)
+					OnBeat?.Invoke(this, EventArgs.Empty);
 			}
-			catch (OperationCanceledException)
-			{
-				Debug.Log("beat task cancelled");
-			}
+		}
+		catch (OperationCanceledException)
+		{
+			Debug.Log("beat task cancelled");
 		}
 	}
 	public void Upgrade(float Delay)
 	{
 		beatDelayMod.Add(Delay);
 		beatDelayBuffered = beatDelayTotal;
+	}
+	public void UpgradeBeatMax(int Amount)
+	{
+		beatMax += Amount;
+		if(beatMax < 1) beatMax = 1;
 	}
 }

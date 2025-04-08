@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class DifficultyManager : MonoBehaviour
 {
+	public static DifficultyManager Manager { get; private set; }
 	[SerializeField] Slider difficultySlider;
 	[SerializeField] int maxDifficulty;
 	public int CurrentDiffculty { get; private set; }
@@ -14,8 +15,10 @@ public class DifficultyManager : MonoBehaviour
 	List<int> diffStepMod = new List<int>();
 	int diffStepTotal => difficultyStep - diffStepMod.Aggregate(0, (total, next) => total += next);
 	int diffStepBuffered;
+	public int EnemyAmountBuff { get; private set; } = 0;
 	void Start()
 	{
+		Manager = this;
 		difficultySlider.maxValue = maxDifficulty;
 		difficultySlider.value = 0;
 
@@ -35,6 +38,10 @@ public class DifficultyManager : MonoBehaviour
 			if (CurrentDiffculty >= difficultyToUpgrade)
 			{
 				difficultyToUpgrade += diffStepBuffered;
+
+				EnemyAmountBuff++;
+				EnemyManager.Manager.Upgrade(Health: 0.25f, EnemyAmount: 1);
+
 				Upgrade();
 			}
 		};
@@ -49,6 +56,6 @@ public class DifficultyManager : MonoBehaviour
 	}
 	void Upgrade()
 	{
-		//TODO: Show difficulty cards
+		UpgradeSystem.Manager.UpgradeEnemy();
 	}
 }

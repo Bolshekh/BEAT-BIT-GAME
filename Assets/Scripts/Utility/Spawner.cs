@@ -12,6 +12,7 @@ public class Spawner : MonoBehaviour
 	[SerializeField] float delaySeconds;
 	CancellationTokenSource cts = new CancellationTokenSource();
 	public GameObject Enemy => objectToSpawn;
+	public event EventHandler<GameObjectEventArgs> OnEntitySpawn;
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -50,11 +51,9 @@ public class Spawner : MonoBehaviour
 	}
 	void Spawn()
 	{
-
 		var _enemy = Instantiate(objectToSpawn, transform.position, transform.rotation);
 
-		_enemy.GetComponent<HealthSystem>().EntityDied += (s, e) => { EnemyManager.Manager.RemoveEnemy(); };
-
+		OnEntitySpawn?.Invoke(this, new GameObjectEventArgs() { Entity = _enemy });
 
 		Destroy(gameObject);
 	}

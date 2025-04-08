@@ -10,10 +10,13 @@ public class PlayerExperience : MonoBehaviour
 	[SerializeField] float expToLvlUpIncrease = 2f;
 	float currentExp = 0f;
 	[SerializeField] Slider expSlider;
+	[SerializeField] float smoothing = 20f;
+	float vel;
 
 	//events
 	public event EventHandler OnExpRecieve;
 	public event EventHandler OnLvlUp;
+
 	private void Start()
 	{
 		expSlider.maxValue = expToLvlUp;
@@ -26,14 +29,18 @@ public class PlayerExperience : MonoBehaviour
 		if(currentExp >= expToLvlUp)
 		{
 			currentExp -= expToLvlUp;
-			expToLvlUp += expToLvlUpIncrease;
+			expToLvlUp += (expToLvlUpIncrease + DifficultyManager.Manager.EnemyAmountBuff);
+			expSlider.maxValue = expToLvlUp;
 			OnLvlUp?.Invoke(this, EventArgs.Empty);
 			Upgrade();
 		}
-		expSlider.value = currentExp;
+	}
+	private void Update()
+	{
+		expSlider.value = Mathf.SmoothDamp(expSlider.value, currentExp, ref vel, smoothing * Time.deltaTime);
 	}
 	void Upgrade()
 	{
-		//TODO: Show player upgrade cards
+		UpgradeSystem.Manager.UpgradePlayer();
 	}
 }
