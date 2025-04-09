@@ -297,6 +297,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Menu
       objectReference: {fileID: 0}
+    - target: {fileID: 7136741472768504441, guid: 3a41f6b5d819e9b4e9119e51a47172d4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8681397268512148118, guid: 3a41f6b5d819e9b4e9119e51a47172d4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -810,7 +814,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.15875001, y: 0.7816667}
   m_AnchorMax: {x: 0.84000003, y: 0.9416667}
-  m_AnchoredPosition: {x: 0.5, y: -1}
+  m_AnchoredPosition: {x: 0, y: -0.9995117}
   m_SizeDelta: {x: 2.0847778, y: 0.8457947}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2115793108
